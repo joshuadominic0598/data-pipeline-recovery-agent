@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1350" viewBox="0 0 1920 1350">
+<style>text{font-family:Arial,Helvetica,sans-serif} .arrow{fill:none;stroke-linecap:round;stroke-linejoin:round}</style>
+<defs>
+<marker id="accent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#285DAB"/></marker>
+<marker id="secondary" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#CB513D"/></marker>
+<marker id="muted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#8192AF"/></marker>
+</defs>
+<rect x="0" y="0" width="1920" height="1350" rx="0" fill="#F4F7FC" stroke="#F4F7FC" stroke-width="1.6"/>
+<text x="64" y="52" fill="#285DAB" font-size="16" font-weight="700" text-anchor="start">DATABRICKS / GITHUB / CONTROLLED PRODUCTION RECOVERY</text>
+<text x="64" y="108" fill="#172B50" font-size="40" font-weight="700" text-anchor="start">From failed job to verified production recovery</text>
+<text x="1840" y="100" fill="#CB513D" font-size="16" font-weight="700" text-anchor="end">PRODUCTION TARGET · NOT DEPLOYED</text>
+<rect x="40" y="150" width="1840" height="270" rx="15" fill="#E8EEF9" stroke="#BDCBE0" stroke-width="1.6"/>
+<text x="64" y="182" fill="#285DAB" font-size="17" font-weight="700" text-anchor="start">01  DATABRICKS WORKSPACE — DETECT, INVESTIGATE &amp; TEST</text>
+<rect x="64" y="215" width="370" height="166" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="84" y="237" width="30" height="30" viewBox="0 0 24 24"><path d="M3 3h7v7H3Z M14 14h7v7h-7Z M10 6h7v8 M6 10v7h8" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="128" y="260" fill="#172B50" font-size="22" font-weight="700" text-anchor="start">01  Scheduled job</text>
+<text x="85" y="298" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Lakeflow job runs the PySpark stages</text>
+<text x="85" y="325" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Successful tasks save checkpoints</text>
+<text x="85" y="352" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Daily hospital logistics partition</text>
+<rect x="530" y="215" width="370" height="166" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="550" y="237" width="30" height="30" viewBox="0 0 24 24"><path d="M3 21V3 M3 21h19 M6 15l5-7 4 4 6-8" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="594" y="260" fill="#172B50" font-size="22" font-weight="700" text-anchor="start">02  Task failure</text>
+<text x="551" y="298" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Capture logs, schema and source version</text>
+<text x="551" y="325" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Stop dependent stages</text>
+<text x="551" y="352" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Notify the pipeline owner</text>
+<rect x="996" y="215" width="370" height="166" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="1016" y="237" width="30" height="30" viewBox="0 0 24 24"><path d="M5 6h14v13H5Z M12 2v4 M8 11h1 M15 11h1 M8 16h8 M2 10v5 M22 10v5" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="1060" y="260" fill="#172B50" font-size="22" font-weight="700" text-anchor="start">03  Hosted recovery agent</text>
+<text x="1017" y="298" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Agent runs as a Databricks task</text>
+<text x="1017" y="325" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Investigate evidence and propose a diff</text>
+<text x="1017" y="352" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Use a configured workspace model*</text>
+<rect x="1462" y="215" width="370" height="166" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="1482" y="237" width="30" height="30" viewBox="0 0 24 24"><path d="M8 5L2 12l6 7 M16 5l6 7-6 7 M14 3l-4 18" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="1526" y="260" fill="#172B50" font-size="22" font-weight="700" text-anchor="start">04  Isolated candidate</text>
+<text x="1483" y="298" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Patch a notebook / .py sandbox copy</text>
+<text x="1483" y="325" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Run the candidate on isolated data</text>
+<text x="1483" y="352" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Require job AND data-quality tests</text>
+<polyline class="arrow" points="434,296 530,296" stroke="#285DAB" stroke-width="2.4" marker-end="url(#accent)"/>
+<polyline class="arrow" points="900,296 996,296" stroke="#285DAB" stroke-width="2.4" marker-end="url(#accent)"/>
+<polyline class="arrow" points="1366,296 1462,296" stroke="#285DAB" stroke-width="2.4" marker-end="url(#accent)"/>
+<rect x="40" y="505" width="1840" height="280" rx="15" fill="#E8EEF9" stroke="#BDCBE0" stroke-width="1.6"/>
+<text x="64" y="537" fill="#285DAB" font-size="17" font-weight="700" text-anchor="start">02  GOVERNANCE &amp; SOURCE-CONTROLLED PROMOTION — RIGHT TO LEFT</text>
+<rect x="1462" y="570" width="370" height="193" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="1482" y="592" width="30" height="30" viewBox="0 0 24 24"><path d="M8 7a4 4 0 1 0 8 0 4 4 0 0 0-8 0 M4 22v-5c0-5 16-5 16 0v5Z" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="1526" y="615" fill="#172B50" font-size="21" font-weight="700" text-anchor="start">05  Policy + owner review</text>
+<text x="1483" y="653" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Auto: reviewed low-risk repair</text>
+<text x="1483" y="680" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Owner: data or dependency change</text>
+<text x="1483" y="707" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Design change → engineering review</text>
+<text x="1483" y="734" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Save exact code / input approval</text>
+<rect x="996" y="570" width="370" height="193" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="1016" y="592" width="30" height="30" viewBox="0 0 24 24"><path d="M8 5L2 12l6 7 M16 5l6 7-6 7 M14 3l-4 18" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="1060" y="615" fill="#172B50" font-size="21" font-weight="700" text-anchor="start">06  GitHub commit / PR</text>
+<text x="1017" y="653" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Promotion service commits tested diff</text>
+<text x="1017" y="680" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Attach evidence and approval digest</text>
+<text x="1017" y="707" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Honor branch protection + reviews</text>
+<text x="1017" y="734" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Git is the source of truth</text>
+<rect x="530" y="570" width="370" height="193" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="550" y="592" width="30" height="30" viewBox="0 0 24 24"><path d="M4 3h16v18H4Z M7 12l4 4 6-8" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="594" y="615" fill="#172B50" font-size="21" font-weight="700" text-anchor="start">07  CI on the exact commit</text>
+<text x="551" y="653" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Repeat tests and quality gates</text>
+<text x="551" y="680" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Reject stale code / input digests</text>
+<text x="551" y="707" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Validate the Databricks bundle</text>
+<text x="551" y="734" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Authorize deployment identity</text>
+<rect x="64" y="570" width="370" height="193" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="84" y="592" width="30" height="30" viewBox="0 0 24 24"><path d="M3 8l9-5 9 5-9 5Z M3 8v10l9 5 9-5V8 M12 13v10" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="128" y="615" fill="#172B50" font-size="21" font-weight="700" text-anchor="start">08  Deploy new bundle</text>
+<text x="85" y="653" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Deploy the approved source revision</text>
+<text x="85" y="680" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Update notebook / .py and job assets</text>
+<text x="85" y="707" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Record release + commit identifiers</text>
+<text x="85" y="734" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Do not edit a running job in place</text>
+<polyline class="arrow" points="1647,381 1647,570" stroke="#285DAB" stroke-width="2.4" marker-end="url(#accent)"/>
+<text x="1708" y="467" fill="#285DAB" font-size="15" font-weight="400" text-anchor="middle">tests pass</text>
+<polyline class="arrow" points="1462,664 1366,664" stroke="#CB513D" stroke-width="2.4" marker-end="url(#secondary)"/>
+<polyline class="arrow" points="996,664 900,664" stroke="#CB513D" stroke-width="2.4" marker-end="url(#secondary)"/>
+<polyline class="arrow" points="530,664 434,664" stroke="#CB513D" stroke-width="2.4" marker-end="url(#secondary)"/>
+<rect x="40" y="870" width="1840" height="290" rx="15" fill="#E8EEF9" stroke="#BDCBE0" stroke-width="1.6"/>
+<text x="64" y="902" fill="#285DAB" font-size="17" font-weight="700" text-anchor="start">03  REPAIR &amp; VERIFY — AFTER THE ORIGINAL RUN IS TERMINAL</text>
+<rect x="64" y="935" width="525" height="192" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="84" y="957" width="30" height="30" viewBox="0 0 24 24"><path d="M3 3h7v7H3Z M14 14h7v7h-7Z M10 6h7v8 M6 10v7h8" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="128" y="980" fill="#172B50" font-size="23" font-weight="700" text-anchor="start">09  Repair the failed run</text>
+<text x="85" y="1018" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Use the updated deployed job settings</text>
+<text x="85" y="1045" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Rerun failed tasks and their dependents</text>
+<text x="85" y="1072" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Reuse successful upstream checkpoints</text>
+<text x="85" y="1099" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Track the new repair attempt</text>
+<rect x="684" y="935" width="525" height="192" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="704" y="957" width="30" height="30" viewBox="0 0 24 24"><path d="M4 3h16v18H4Z M7 12l4 4 6-8" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="748" y="980" fill="#172B50" font-size="23" font-weight="700" text-anchor="start">10  Verify + publish</text>
+<text x="705" y="1018" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Check repaired run status and seven data gates</text>
+<text x="705" y="1045" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Validate counts, duplicates, freshness and rules</text>
+<text x="705" y="1072" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Match results to the approved code + source</text>
+<text x="705" y="1099" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Publish only the verified data product</text>
+<rect x="1304" y="935" width="525" height="192" rx="12" fill="#FFFFFF" stroke="#BDCBE0" stroke-width="1.6"/>
+<svg x="1324" y="957" width="30" height="30" viewBox="0 0 24 24"><path d="M2 5h20v14H2Z M2 5l10 8L22 5" fill="none" stroke="#285DAB" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<text x="1368" y="980" fill="#172B50" font-size="23" font-weight="700" text-anchor="start">11  Notify + close incident</text>
+<text x="1325" y="1018" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Email the owner: failure, fix and impact</text>
+<text x="1325" y="1045" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Include commit / release / repair identifiers</text>
+<text x="1325" y="1072" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Attach validation and trace evidence</text>
+<text x="1325" y="1099" fill="#4D6080" font-size="18" font-weight="400" text-anchor="start">Close only after verified recovery</text>
+<polyline class="arrow" points="249,763 249,824 48,824 48,919 249,919 249,935" stroke="#CB513D" stroke-width="2.4" marker-end="url(#secondary)"/>
+<text x="333" y="813" fill="#CB513D" font-size="15" font-weight="400" text-anchor="middle">deployed revision</text>
+<polyline class="arrow" points="589,1028 684,1028" stroke="#285DAB" stroke-width="2.4" marker-end="url(#accent)"/>
+<polyline class="arrow" points="1209,1028 1304,1028" stroke="#285DAB" stroke-width="2.4" marker-end="url(#accent)"/>
+<rect x="64" y="1194" width="1768" height="62" rx="10" fill="#FFF0EC" stroke="#E4B8AE" stroke-width="1.6"/>
+<text x="88" y="1232" fill="#CB513D" font-size="21" font-weight="700" text-anchor="start">Any failed test, rejected approval or bad verification stops promotion/publication and retains the last trusted data.</text>
+<text x="64" y="1295" fill="#4D6080" font-size="17" font-weight="400" text-anchor="start">* Local demo: Qwen via Ollama. Hosted reference: runbook mode. Workspace model adapter + identity-backed approval/promotion remain integration work.</text>
+<text x="64" y="1324" fill="#4D6080" font-size="17" font-weight="400" text-anchor="start">Durable production evidence: Delta/control database + immutable data snapshots. Separate agent, reviewer and deployment identities.</text>
+</svg>

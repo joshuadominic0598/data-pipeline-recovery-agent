@@ -2,6 +2,12 @@
 
 The free local demonstration executes the full recovery loop. The Databricks files are a workspace integration reference, not a deployment that has been run or validated against a workspace. No Databricks account, compute, volume, model endpoint, cloud job, or deployment credential is provisioned by local setup.
 
+## Production flow
+
+![Databricks production recovery flow](diagrams/databricks_production.png)
+
+The agent runs inside Databricks, tests an isolated notebook/Python patch, and hands the verified change to an authorized source-control and deployment service. The diagram follows the target handoff through GitHub, CI, bundle deployment, repaired tasks and data verification. [Scalable SVG](diagrams/databricks_production.svg) · [Concrete scenario in the README](../README.md#how-this-would-run-in-production-on-databricks).
+
 ## Intended production sequence
 
 1. A scheduled Lakeflow job runs the five PySpark stages. Successful stages save checkpoints to a Unity Catalog volume.

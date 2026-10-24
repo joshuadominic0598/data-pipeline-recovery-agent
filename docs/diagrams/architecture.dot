@@ -1,25 +1,22 @@
 digraph VitalRoute {
-  graph [bgcolor="#10151f", pad="0.5", ranksep="0.5", nodesep="0.35", fontname="Helvetica", label="VITALROUTE  /  EVIDENCE-LED PIPELINE RECOVERY", labelloc=t, fontsize=20, fontcolor="#d7e5f3", splines=ortho];
-  node [shape=box, style="rounded,filled", fillcolor="#23352f", color="#4a7560", fontcolor="#c5edda", fontname="Helvetica", fontsize=12, margin="0.18,0.14"];
-  edge [color="#697f95", arrowsize=0.7, fontcolor="#9aaec4", fontname="Helvetica", fontsize=10];
-  trigger [label="Dashboard / daily schedule", fillcolor="#263449",color="#4d6689",fontcolor="#d3e1f4"];
-  data [label="Daily hospital logistics feed\n192 synthetic shipment events\nOptional real Open-Meteo snapshot",fillcolor="#263449",color="#4d6689",fontcolor="#d3e1f4"];
-  pipeline [label="PySpark pipeline + Parquet checkpoints\nIngest  →  Clean  →  Preprocess  →  Business rules  →  Consumption"];
-  agent [label="Local Qwen recovery agent\nRead code · inspect schema · profile data\nVerify manifest · probe dependency",fillcolor="#363048",color="#756295",fontcolor="#ded0f4"];
-  policy [label="Evidence + whole-module AST policy\nOnly reviewed Python edits reach execution",fillcolor="#40382c",color="#8a704b",fontcolor="#f3d5a1"];
-  sandbox [label="Isolated Spark test\n7 data-quality gates + event reconciliation"];
-  approval [label="Approval required?\nData treatment or dependency changes\nExact code + input digest; restart-safe",fillcolor="#40382c",color="#8a704b",fontcolor="#f3d5a1"];
-  release [label="Local Git commit → immutable release\nResume failed task + dependent stages"];
-  verify [label="Verify job AND downstream data\nCounts · duplicates · freshness · validity\nBusiness rules · coverage · event conservation"];
-  publish [label="Publish validated Parquet\nReports / ML features / API data"];
-  preserve [label="Reject / fail → withhold publication\nPrevious trusted data stays available",fillcolor="#402e34",color="#80505c",fontcolor="#e5b9c3"];
-  state [label="SQLite WAL\nRun state · append-only trace\nProposal · decision · email outbox",fillcolor="#263449",color="#4d6689",fontcolor="#d3e1f4"];
-  email [label="Gmail OAuth / durable outbox\nFailure · approval · recovery",fillcolor="#263449",color="#4d6689",fontcolor="#d3e1f4"];
-  cloud [label="DATABRICKS PRODUCTION MAPPING  /  integration reference\nHosted recovery notebook → GitHub PR + CI → bundle deploy → repair-run\nUC volume + Delta evidence; identity-backed approval / promotion service required",fillcolor="#232b3a",color="#596b83",fontcolor="#a9bbd0",style="rounded,filled,dashed"];
-  trigger -> data -> pipeline -> agent -> policy -> sandbox -> approval -> release -> verify -> publish;
-  approval -> preserve [style=dashed]; verify -> preserve [style=dashed];
-  agent -> state [style=dashed,dir=both]; approval -> state [style=dashed]; verify -> email [style=dashed]; state -> email;
-  publish -> cloud [style=dashed];
-  {rank=same; agent;state;}
-  {rank=same; verify;email;preserve;}
+  graph [bgcolor="#10151f", pad="0.4", ranksep="0.7", nodesep="0.45", fontname="Helvetica", label="VITALROUTE  /  RECOVERY AT A GLANCE", labelloc=t, fontsize=23, fontcolor="#d7e5f3", splines=ortho];
+  node [shape=box, style="rounded,filled", fillcolor="#23352f", color="#4a7560", fontcolor="#c5edda", fontname="Helvetica", fontsize=15, margin="0.22,0.18", width=3.2];
+  edge [color="#91a6bc", arrowsize=0.8, penwidth=1.6];
+  trigger [label="01  Trigger a daily refresh\nHospital logistics + weather",fillcolor="#263449",color="#4d6689",fontcolor="#d3e1f4"];
+  pipeline [label="02  Run the PySpark pipeline\nIngest → clean → rules → consumption"];
+  agent [label="03  Investigate the failure\nRead evidence · propose a code patch",fillcolor="#363048",color="#756295",fontcolor="#ded0f4"];
+  test [label="04  Test + check repair policy\nAutomatic if allowed; approval otherwise",fillcolor="#40382c",color="#8a704b",fontcolor="#f3d5a1"];
+  release [label="05  Deploy + resume\nLocal Git release · reuse checkpoints"];
+  verify [label="06  Verify + publish\nJob success AND all seven data checks"];
+  stop [label="If tests fail or approval is rejected: stop recovery and retain the last trusted data.",fillcolor="#402e34",color="#80505c",fontcolor="#e5b9c3",fontsize=13];
+  state [label="Persistent throughout: SQLite state + approvals + full trace + notification outbox",fillcolor="#263449",color="#4d6689",fontcolor="#d3e1f4",fontsize=13];
+  {rank=same; trigger; pipeline; agent;}
+  {rank=same; verify; release; test;}
+  trigger -> pipeline -> agent;
+  agent -> test;
+  verify -> release -> test [style=invis];
+  test -> release -> verify [constraint=false];
+  test -> stop [style=dashed];
+  verify -> state [style=dashed];
+  {rank=same; stop; state;}
 }

@@ -1,4 +1,4 @@
-.PHONY: setup build start test evaluate lint
+.PHONY: setup build start test evaluate lint diagrams
 setup:
 	python3 scripts/setup.py
 build:
@@ -11,3 +11,5 @@ evaluate:
 	python3 scripts/run.py evaluate
 lint:
 	.venv/bin/ruff check backend tests scripts
+diagrams:
+	python3 scripts/render_diagrams.py

@@ -60,11 +60,29 @@ The model proposes; code enforces. Whole-module AST checks reject edits outside 
 
 ## Architecture
 
-![VitalRoute architecture](docs/diagrams/architecture.svg)
+![VitalRoute recovery at a glance](docs/diagrams/architecture.png)
 
 **React + TypeScript** renders recorded events from **FastAPI**. A durable Python recovery state machine controls **PySpark**, **SQLite**, **Ollama**, and a notification outbox. The coding tool materializes a reviewed patch; it never executes unrestricted model text. [Architecture and control boundaries](docs/architecture.md).
 
-The production mapping follows **Databricks job failure → hosted recovery notebook → isolated test → policy/approval → GitHub commit/PR → CI → bundle deployment → repair failed tasks → data verification**. Included notebooks, bundle definitions, and a plan-only CLI make the handoff inspectable. Identity-backed cloud approval/promotion and workspace validation remain integration work. [Databricks guide](docs/databricks.md).
+**System view: the services, tools, and controls behind the recovery.**
+
+![VitalRoute recovery system architecture](docs/diagrams/recovery_system.png)
+
+## How this would run in production on Databricks
+
+Suppose a carrier changes `temperature_c` to `temp_c`. The hospital supply job ingests the daily partition, but its cleaning notebook fails. Downstream inventory and risk reports keep their last verified data while recovery begins.
+
+![Databricks production recovery flow](docs/diagrams/databricks_production.png)
+
+1. **Failure triggers an agent hosted on Databricks.** A recovery task uses an [at-least-one-failed condition](https://docs.databricks.com/aws/en/jobs/run-if), captures the error and alerts the owner. It reads logs, source schemas, the affected notebook or Python file, source revision, and data-quality evidence.
+2. **The agent prepares and tests a patch.** It changes an isolated copy of the transformation and runs it against a versioned data snapshot. The candidate must execute successfully and pass the downstream data checks before it can progress.
+3. **Policy decides the approval boundary.** A verified column alias can proceed automatically. Data-treatment or workflow-dependency changes require owner approval of the exact tested code and inputs. Design and architectural changes go to engineering review; they are outside the agent's executable repair recipes. The checkpoint persists while it waits.
+4. **The tested change becomes a GitHub revision.** A trusted promotion service creates the commit/PR with its diff, evidence and approval record. CI tests that exact commit and respects repository protections. A passing sandbox does not authorize an unrelated source revision.
+5. **Deploy the new bundle, then repair the run.** A separate deployment identity [deploys the approved bundle](https://docs.databricks.com/aws/en/dev-tools/cli/bundle-commands). After the original run is terminal, the service [repairs the failed task and its dependents](https://docs.databricks.com/aws/en/jobs/repair-job-failures) using the updated job settings, reusing successful upstream work. Each repaired task starts again from the beginning, so its writes must be idempotent.
+6. **Verify the data before declaring recovery.** Check row counts, duplicates, freshness, required fields, valid values, business rules and event conservation. Bind the results to the approved code and source snapshot; publish only after all checks pass.
+7. **Email the owner and close the incident.** Report the original failure, cause, deployed fix, commit/release, repaired run, validation results and any quarantined records. Failed tests, rejected approval or bad verification leave the incident open and retain the last trusted data.
+
+**This is the production target, not a deployed cloud service.** The repository includes staged Databricks notebooks, a bundle definition and a plan-only promotion CLI. The hosted reference currently uses runbook investigation. A workspace model adapter, identity-backed approval/promotion service, credentials and live workspace validation remain integration work. The local demo exercises the recovery loop without paid cloud resources. [Databricks implementation guide](docs/databricks.md).
 
 ## Evidence
 

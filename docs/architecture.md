@@ -2,9 +2,17 @@
 
 The application is a small durable state machine around a real PySpark job. It uses SQLite rather than a cloud orchestrator for the local control plane; the data plane is date-partitioned JSON and Parquet. React displays recorded events from the API every 1.5 seconds. FastAPI handles control requests while a single background worker serializes Spark jobs.
 
-![Recovery architecture](diagrams/architecture.svg)
+![Recovery at a glance](diagrams/architecture.png)
 
-Editable sources: [Mermaid](diagrams/architecture.mmd) and [Graphviz](diagrams/architecture.dot).
+The short flow preserves the original dark palette and groups recovery into six steps. Editable overview sources: [Mermaid](diagrams/architecture.mmd), [Graphviz](diagrams/architecture.dot), and [SVG](diagrams/architecture.svg).
+
+## Services, tools and controls
+
+![Recovery system architecture](diagrams/recovery_system.png)
+
+This copper-and-ivory system view follows the service-and-arrow structure of the AgilePlanner architecture while showing VitalRoute's own data plane, recovery tools, approvals and local release controls. [Scalable SVG](diagrams/recovery_system.svg).
+
+The separate [Databricks production flow](databricks.md#production-flow) describes the target cloud handoff. Both service diagrams are generated from [render_diagrams.py](../scripts/render_diagrams.py); the SVG exports are editable vector files. Run `make diagrams` with Graphviz and `rsvg-convert` (librsvg) installed to rebuild all three views. These rendering tools are needed only for documentation changes.
 
 ## Data product
 
