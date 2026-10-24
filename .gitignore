@@ -1,0 +1,16 @@
+.venv/
+.tools/
+.state/
+.env
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+*.tsbuildinfo
+*.egg-info/
+frontend/node_modules/
+frontend/dist/
+artifacts/
+.DS_Store
+.databricks/
+*.log

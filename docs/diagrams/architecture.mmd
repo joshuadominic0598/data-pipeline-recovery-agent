@@ -1,0 +1,25 @@
+flowchart TB
+  classDef source fill:#283548,color:#dce7f4,stroke:#53667e
+  classDef compute fill:#243d36,color:#c5f5dc,stroke:#547e68
+  classDef agent fill:#38314c,color:#e0d4fc,stroke:#796899
+  classDef gate fill:#443a2b,color:#f3d6a0,stroke:#95784b
+  classDef cloud fill:#252e3d,color:#b7c9df,stroke:#576b85,stroke-dasharray:5 5
+  trigger[Dashboard / daily scheduler]:::source --> source[Date-partitioned hospital logistics feed\n192 synthetic shipment events + optional live weather]:::source
+  source --> pipeline[PySpark checkpoints\nIngest → Clean → Preprocess → Business rules → Consumption]:::compute
+  pipeline -->|failure and evidence| investigator[Local Qwen tool agent\nLogs · schema · source profile · manifest · provider probe]:::agent
+  investigator --> proposal[Evidence-eligible repair\nVersioned Python code diff]:::agent
+  proposal --> policy[Whole-module AST policy\nNo arbitrary code or business-threshold edits]:::gate
+  policy --> sandbox[Isolated Spark output\nSeven downstream quality gates]:::compute
+  sandbox --> risk{Reviewed low-risk runbook?}:::gate
+  risk -->|yes| apply[Local Git commit → immutable code release\nResume failed task and downstream stages]:::compute
+  risk -->|no| approval[Digest-bound owner approval\nSQLite checkpoint survives restart]:::gate
+  approval -->|approved| apply
+  approval -->|rejected| stop[Withhold publication\nPreserve previous data product]:::gate
+  apply --> verify{Job + data checks pass?}:::gate
+  verify -->|yes| publish[Atomically publish Parquet data product\nReports · API data · ML features]:::compute
+  verify -->|no| stop
+  investigator -.-> state[(SQLite WAL\nState · trace · notification outbox)]:::source
+  approval -.-> state
+  verify -.-> email[Gmail OAuth delivery / durable outbox\nFailure · approval · verified recovery]:::source
+  state -.-> email
+  apply -. production mapping .-> cloud[Databricks-hosted recovery notebook\nGitHub PR → CI → bundle deploy → jobs repair-run\nDelta evidence + identity-backed approval service]:::cloud

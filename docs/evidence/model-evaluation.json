@@ -1,0 +1,110 @@
+{
+  "measured_at": "2026-10-25",
+  "runtime": "macOS arm64 / Python 3.12 / Java 17 / PySpark 4.0.1",
+  "model": "qwen3:8b via local Ollama",
+  "dataset": "Synthetic partition 2026-10-24",
+  "approval": "Evaluation harness explicitly played the owner",
+  "scope": "One final evaluation of five known injected failures, not a reliability benchmark",
+  "outcomes": [
+    {
+      "scenario": "schema_drift",
+      "expected": "schema_drift",
+      "diagnosed": "schema_drift",
+      "correct_diagnosis": true,
+      "verified_recovery": true,
+      "unnecessary_change": false,
+      "seconds": 15.05,
+      "metrics": {
+        "mode": "ollama",
+        "model": "qwen3:8b",
+        "input_tokens": 3089,
+        "output_tokens": 119,
+        "cost_usd": 0.0,
+        "cost_scope": "Local inference API charge; excludes hardware/electricity",
+        "turns": 2,
+        "latency_seconds": 8.37
+      },
+      "error": null
+    },
+    {
+      "scenario": "duplicates",
+      "expected": "duplicates",
+      "diagnosed": "duplicates",
+      "correct_diagnosis": true,
+      "verified_recovery": true,
+      "unnecessary_change": false,
+      "seconds": 9.69,
+      "metrics": {
+        "mode": "ollama",
+        "model": "qwen3:8b",
+        "input_tokens": 2941,
+        "output_tokens": 76,
+        "cost_usd": 0.0,
+        "cost_scope": "Local inference API charge; excludes hardware/electricity",
+        "turns": 2,
+        "latency_seconds": 6.42
+      },
+      "error": null
+    },
+    {
+      "scenario": "missing_partition",
+      "expected": "missing_partition",
+      "diagnosed": "missing_partition",
+      "correct_diagnosis": true,
+      "verified_recovery": true,
+      "unnecessary_change": false,
+      "seconds": 10.17,
+      "metrics": {
+        "mode": "ollama",
+        "model": "qwen3:8b",
+        "input_tokens": 2957,
+        "output_tokens": 91,
+        "cost_usd": 0.0,
+        "cost_scope": "Local inference API charge; excludes hardware/electricity",
+        "turns": 2,
+        "latency_seconds": 6.95
+      },
+      "error": null
+    },
+    {
+      "scenario": "invalid_values",
+      "expected": "invalid_values",
+      "diagnosed": "invalid_values",
+      "correct_diagnosis": true,
+      "verified_recovery": true,
+      "unnecessary_change": false,
+      "seconds": 12.89,
+      "metrics": {
+        "mode": "ollama",
+        "model": "qwen3:8b",
+        "input_tokens": 3351,
+        "output_tokens": 157,
+        "cost_usd": 0.0,
+        "cost_scope": "Local inference API charge; excludes hardware/electricity",
+        "turns": 2,
+        "latency_seconds": 10.29
+      },
+      "error": null
+    },
+    {
+      "scenario": "dependency_down",
+      "expected": "dependency_down",
+      "diagnosed": "dependency_down",
+      "correct_diagnosis": true,
+      "verified_recovery": true,
+      "unnecessary_change": false,
+      "seconds": 8.66,
+      "metrics": {
+        "mode": "ollama",
+        "model": "qwen3:8b",
+        "input_tokens": 2975,
+        "output_tokens": 91,
+        "cost_usd": 0.0,
+        "cost_scope": "Local inference API charge; excludes hardware/electricity",
+        "turns": 2,
+        "latency_seconds": 6.26
+      },
+      "error": null
+    }
+  ]
+}

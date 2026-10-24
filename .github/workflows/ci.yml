@@ -1,0 +1,44 @@
+name: Verify local recovery
+on:
+  # Opt-in only: do not consume hosted runner minutes when this demo is pushed.
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      AGENT_MODE: runbook
+      EMAIL_MODE: outbox
+      SPARK_LOCAL_IP: 127.0.0.1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements.lock
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: |
+          python -m venv .venv
+          .venv/bin/pip install -r requirements.lock
+          .venv/bin/pip install -e . --no-deps
+      - run: .venv/bin/ruff check backend tests scripts deploy
+      - run: python scripts/run.py test
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm --dir frontend install --frozen-lockfile
+      - run: python scripts/run.py build
+      - run: python scripts/run.py evaluate --output artifacts/evaluation.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: runbook-evaluation
+          path: artifacts/evaluation.json

@@ -1,0 +1,10 @@
+{
+  "contract": "Fictional carrier source contract v2",
+  "aliases": {"temp_c": "temperature_c"},
+  "temperature_unit": "Celsius",
+  "event_key": "event_id",
+  "duplicate_policy": "Only fully identical replay events may be removed automatically",
+  "temperature_plausibility": [-40, 60],
+  "cold_chain_release_range": [2, 8],
+  "notes": "Demonstration thresholds for fictional products; not medical guidance. Business thresholds cannot be edited by the agent."
+}
