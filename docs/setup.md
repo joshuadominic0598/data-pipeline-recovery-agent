@@ -53,7 +53,7 @@ Restart after configuration. The next worker cycle flushes queued notifications.
 make test
 make lint
 make evaluate                         # real Spark, deterministic investigator
-python3 scripts/run.py evaluate --mode ollama --output artifacts/ollama-evaluation.json
+python3 tools/run.py evaluate --mode ollama --output artifacts/ollama-evaluation.json
 ```
 
 Evaluations explicitly act as a test owner to approve policy-gated candidates. Application runs always stop for an actual operator decision. Results are written locally under `artifacts/` and excluded from Git. The UI metrics use recorded runs and known injected causes, with elapsed time including approval waits. They are demonstration measurements, not production reliability claims.

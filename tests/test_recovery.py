@@ -2,12 +2,12 @@ import json
 import subprocess
 
 import pytest
-from recovery.config import TEMPLATE
-from recovery.engine import Engine
-from recovery.policy import eligible, patch, verify_patch
-from recovery.source import input_digest
-from recovery.store import Store
 
+from vitalroute.agent.policy import eligible, patch, verify_patch
+from vitalroute.config import TEMPLATE
+from vitalroute.pipeline.source import input_digest
+from vitalroute.recovery.engine import Engine
+from vitalroute.recovery.store import Store
 
 def incident(tmp_path, spark, scenario):
     store = Store(tmp_path)
@@ -16,7 +16,6 @@ def incident(tmp_path, spark, scenario):
     run = engine.trigger(scenario, "2026-10-24", "runbook")
     engine.process(run["id"])
     return store, engine, run["id"]
-
 
 @pytest.mark.parametrize(
     "scenario,expected,approval,rows",
@@ -63,14 +62,12 @@ def test_real_spark_recovery_and_persisted_approval(tmp_path, spark, scenario, e
     )
     assert {m["kind"] for m in store.emails(rid)} >= {"pipeline_failed", "recovery_verified"}
 
-
 def test_healthy_run_needs_no_agent_or_change(tmp_path, spark):
     store, _, rid = incident(tmp_path, spark, "healthy")
     run = store.get(rid)
     assert run["status"] == "succeeded"
     assert not run.get("proposal") and not run.get("deployment")
     assert run["report"]["metrics"]["rows"] == 192
-
 
 def test_rejected_approval_never_deploys(tmp_path, spark):
     store, engine, rid = incident(tmp_path, spark, "dependency_down")
@@ -83,12 +80,11 @@ def test_rejected_approval_never_deploys(tmp_path, spark):
     import sys
     from pathlib import Path
 
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
     from promotion_plan import plan
 
     with pytest.raises(ValueError, match="approval"):
         plan(tmp_path, rid, 123)
-
 
 def test_changed_input_cannot_reuse_approval(tmp_path, spark):
     store, engine, rid = incident(tmp_path, spark, "invalid_values")
@@ -103,11 +99,10 @@ def test_changed_input_cannot_reuse_approval(tmp_path, spark):
         engine.process(rid)
     assert not store.get(rid).get("deployment")
 
-
 def test_no_quality_regression_in_unaffected_events(tmp_path, spark):
     store, _, rid = incident(tmp_path, spark, "duplicates")
-    from recovery.pipeline import execute
-    from recovery.source import seed
+    from vitalroute.pipeline.executor import execute
+    from vitalroute.pipeline.source import seed
 
     baseline = tmp_path / "healthy"
     seed(baseline, "2026-10-24", "healthy")
@@ -116,7 +111,6 @@ def test_no_quality_regression_in_unaffected_events(tmp_path, spark):
     healthy = spark.read.parquet(report["output"])
     assert repaired.exceptAll(healthy).count() == 0
     assert healthy.exceptAll(repaired).count() == 0
-
 
 @pytest.mark.parametrize(
     "recipe", ["column_alias", "exact_dedup", "replay_partition", "quarantine_invalid", "registry_mirror"]
@@ -130,7 +124,6 @@ def test_patch_scope_is_enforced(recipe):
     with pytest.raises(ValueError):
         verify_patch(code.replace("between(2, 8)", "between(2, 15)"), recipe)
 
-
 def test_conflicting_replays_and_unknown_edits_fail_closed():
     assert not eligible("exact_dedup", {"profile_records": {"exact_replays": 12, "conflicting_events": 1}})
     assert not eligible(
@@ -141,7 +134,6 @@ def test_conflicting_replays_and_unknown_edits_fail_closed():
         {"inspect_schema": {"columns": ["temperature_f"], "alias_contract": {"temp_c": "temperature_c"}}},
     )
     assert not eligible("invented_repair", {})
-
 
 def test_trigger_and_email_idempotency(tmp_path):
     store = Store(tmp_path)
@@ -156,11 +148,12 @@ def test_trigger_and_email_idempotency(tmp_path):
     assert store.claim_email(one["id"] + "-failure")
     assert not store.claim_email(one["id"] + "-failure")
 
-
 def test_successful_spark_write_is_not_verified_recovery(tmp_path, spark):
     from pyspark.sql import functions as F
-    from recovery.pipeline import execute, validate
-    from recovery.source import seed
+
+    from vitalroute.pipeline.executor import execute
+    from vitalroute.pipeline.quality import validate
+    from vitalroute.pipeline.source import seed
 
     seed(tmp_path, "2026-10-24", "healthy")
     output = tmp_path / "output"

@@ -12,7 +12,7 @@ The short flow preserves the original dark palette and groups recovery into six 
 
 This copper-and-ivory system view follows the service-and-arrow structure of the AgilePlanner architecture while showing VitalRoute's own data plane, recovery tools, approvals and local release controls. [Scalable SVG](diagrams/recovery_system.svg).
 
-The separate [Databricks production flow](databricks.md#production-flow) describes the target cloud handoff. Both service diagrams are generated from [render_diagrams.py](../scripts/render_diagrams.py); the SVG exports are editable vector files. Run `make diagrams` with Graphviz and `rsvg-convert` (librsvg) installed to rebuild all three views. These rendering tools are needed only for documentation changes.
+The separate [Databricks production flow](databricks.md#production-flow) describes the target cloud handoff. Both service diagrams are generated from [render_diagrams.py](../tools/render_diagrams.py); the SVG exports are editable vector files. Run `make diagrams` with Graphviz and `rsvg-convert` (librsvg) installed to rebuild all three views. These rendering tools are needed only for documentation changes.
 
 ## Data product
 
@@ -71,3 +71,25 @@ After deployment, successful upstream Parquet checkpoints are reused. The failed
 SQLite WAL stores runs, ordered events, proposals, approvals, idempotency keys, and notification outbox records. Writes are serialized in process, and an OS file lock prevents a second worker against the same state directory. Restarted active runs re-enter from saved state; waiting approvals remain waiting. A crash between a completed stage and checkpoint acknowledgement may replay that stage safely. The current implementation replays the original pipeline if failure state was not persisted, then resumes repairs from the failed stage once it has evidence.
 
 This is a single-user loopback application. Host/origin checks and an operator token protect mutations against cross-site requests. Bootstrap is readable by local applications; it is not a remote authentication boundary. Do not expose this server publicly. Production requires authenticated users, authorization, distributed leases, durable transactional approval/outbox storage, an isolated executor, access-controlled data snapshots, and protected deployment credentials.
+
+## Code organization
+
+The Python application follows a `src` layout under the single `vitalroute` package. There is no generic repository framework, inheritance hierarchy, or dependency-injection container. Each package has a concrete responsibility:
+
+| Package | Owns | Depends on |
+|---|---|---|
+| `api` | Request schemas, HTTP security, routes, app composition | Recovery service and configuration |
+| `recovery` | Incident lifecycle, operator actions, durable runs and trace | Agent, pipeline, integrations |
+| `agent` | Diagnostic evidence, bounded model/runbook investigation, repair policy | Pipeline sources and configuration |
+| `pipeline` | Spark stages, source snapshots, data contracts, independent quality checks | Configuration and PySpark |
+| `integrations` | Notification delivery and local Git release artifacts | Configuration and artifact hashing |
+
+`api/app.py` composes one store and engine per application. Importing it does not create runtime files or start a worker. Routes validate HTTP input and call `RecoveryService`; the service handles approval/retry actions without depending on FastAPI. The engine reads durable state and advances through preparation, investigation, sandbox, approval, deployment, and verification phases. Pipeline and agent code do not import the HTTP layer.
+
+The React console keeps application state and polling in `App.tsx`. Pages render Mission control, history, guardrails, and notifications. Separate components own navigation, recovery events, the trace panel, and repair/quality/data inspection. `lib/api.ts` owns operator-authenticated requests; `lib/presentation.ts` contains shared display labels and formatting. Components reuse the existing stylesheet.
+
+Use `pipeline/transform.py` for Spark domain transformations, `pipeline/quality.py` for independent publication checks, `agent/diagnostics.py` for read-only investigation tools, and `agent/policy.py` for reviewed repair boundaries. Adding a repair still requires evidence prerequisites, whole-module policy checks, and recovery tests; a UI change cannot grant extra deployment permission.
+
+Developer commands and the pinned Python dependency snapshot live in `tools/`. The Databricks bundle and notebooks live together in `tools/databricks/`. The source package includes its carrier contract so diagnostics work after a normal wheel installation, as well as from a checkout. The launcher sets `VITALROUTE_HOME` to the checkout; an installed package defaults to the current directory unless this variable is set. Local state stays under `.state/` (or `STATE_DIR`), independently of source code organization.
+
+Python uses one blank line between logical sections and methods, grouped imports, and comments only for non-obvious constraints. Keep routes thin, extract cohesive phases from long procedures, and avoid interfaces or wrappers with only one purpose-free implementation.

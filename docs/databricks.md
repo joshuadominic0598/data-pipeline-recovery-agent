@@ -23,10 +23,10 @@ Databricks documents [task failure conditions](https://docs.databricks.com/aws/e
 
 | File | Responsibility |
 |---|---|
-| `databricks.yml` | Five staged notebook tasks, a failure-triggered hosted recovery task, failure email, serialized runs, paused dev triggers |
-| `deploy/databricks/stage.py` | Run exactly one stage using the same PySpark executor and shared checkpoints |
-| `deploy/databricks/recovery_agent.py` | Use the deterministic investigator on Databricks, test a candidate, save proposal and Delta event evidence |
-| `scripts/promotion_plan.py` | Validate a tested local incident/approval and print the corresponding GitHub/bundle/repair plan; **never executes cloud actions** |
+| `tools/databricks/databricks.yml` | Five staged notebook tasks, a failure-triggered hosted recovery task, failure email, serialized runs, paused dev triggers |
+| `tools/databricks/notebooks/stage.py` | Run exactly one stage using the same PySpark executor and shared checkpoints |
+| `tools/databricks/notebooks/recovery_agent.py` | Use the deterministic investigator on Databricks, test a candidate, save proposal and Delta event evidence |
+| `tools/promotion_plan.py` | Validate a tested local incident/approval and print the corresponding GitHub/bundle/repair plan; **never executes cloud actions** |
 | `.github/workflows/ci.yml` | Manual-only CI for Spark tests, frontend build, and deterministic evaluation; no automatic hosted minutes, cloud deployment, or Gmail sends |
 
 The hosted reference uses runbook investigation because a local Ollama process is not reachable inside a Databricks workspace. Connecting a workspace model endpoint requires a provider adapter and an explicit budget. The local Qwen mode is the tested LLM agent experience.
@@ -38,17 +38,20 @@ Required integration work before real deployment: provision a compatible cluster
 After a dashboard recovery, substitute its real run ID and the intended Databricks run ID:
 
 ```bash
-PYTHONPATH=backend .venv/bin/python scripts/promotion_plan.py \
+PYTHONPATH=src .venv/bin/python tools/promotion_plan.py \
   --incident VR-YOURRUNID --databricks-run-id 123456
 ```
 
-This emits argv arrays for `bundle validate`, `bundle deploy`, and `jobs repair-run`, alongside required identity and verification boundaries. The numeric ID above is illustrative and no command is sent. Repeated repairs must use the current `latest_repair_id` from the job's repair history to prevent stale concurrent repair requests. See the [repair API](https://docs.databricks.com/api/workspace/jobs/repairrun).
+The plan identifies `tools/databricks` as the working directory for bundle commands; the promotion service must use that directory in the reviewed checkout. This emits argv arrays for `bundle validate`, `bundle deploy`, and `jobs repair-run`, alongside required identity and verification boundaries. The numeric ID above is illustrative and no command is sent. Repeated repairs must use the current `latest_repair_id` from the job's repair history to prevent stale concurrent repair requests. See the [repair API](https://docs.databricks.com/api/workspace/jobs/repairrun).
 
 ## Workspace validation, when an account is available
 
 ```bash
+cd tools/databricks
 databricks bundle validate -t dev \
   --var cluster_id=YOUR_EXISTING_CLUSTER,data_root=/Volumes/YOUR_CATALOG/YOUR_SCHEMA/YOUR_VOLUME
 ```
+
+The bundle synchronizes only `src/` and its reference notebooks, preserving their repository paths. See the official [bundle sync configuration](https://docs.databricks.com/aws/en/dev-tools/bundles/reference#syncpaths) for paths outside the bundle directory. Runtime state, local environments, and frontend dependencies are outside these sync paths.
 
 Only deploy after reviewing compute cost, permissions, test results, and workspace configuration. Databricks charges depend on the account/compute offering; the project does not assume paid Databricks is free. The local demo requires no Databricks subscription.

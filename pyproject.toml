@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "vitalroute-recovery"
 version = "0.1.0"
+readme = "README.md"
 description = "Evidence-led recovery for a daily PySpark cold-chain data product"
 requires-python = ">=3.11"
 dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1", "httpx>=0.27,<1", "pyspark==4.0.1", "python-dotenv>=1,<2"]
@@ -13,10 +14,13 @@ dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1", "httpx>=0.27,<1", "pysp
 dev = ["pytest>=8,<10", "ruff>=0.11,<1"]
 
 [tool.setuptools.packages.find]
-where = ["backend"]
+where = ["src"]
+
+[tool.setuptools.package-data]
+vitalroute = ["pipeline/contracts/*.json"]
 
 [tool.pytest.ini_options]
-pythonpath = ["backend"]
+pythonpath = ["src"]
 testpaths = ["tests"]
 
 [tool.ruff]
@@ -25,3 +29,6 @@ line-length = 110
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 1

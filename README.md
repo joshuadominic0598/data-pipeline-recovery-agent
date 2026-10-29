@@ -84,13 +84,25 @@ Suppose a carrier changes `temperature_c` to `temp_c`. The hospital supply job i
 
 **This is the production target, not a deployed cloud service.** The repository includes staged Databricks notebooks, a bundle definition and a plan-only promotion CLI. The hosted reference currently uses runbook investigation. A workspace model adapter, identity-backed approval/promotion service, credentials and live workspace validation remain integration work. The local demo exercises the recovery loop without paid cloud resources. [Databricks implementation guide](docs/databricks.md).
 
+## Repository layout
+
+```text
+src/vitalroute/  Python application: API, recovery, agent, pipeline, integrations
+frontend/       React console: pages, components, and API client
+tests/          Recovery, quality, policy, and HTTP regression checks
+docs/           Architecture, setup, production guide, and evidence
+tools/          Local commands, dependency lock, and Databricks reference
+```
+
+`pyproject.toml` defines the installable Python package. `Makefile` keeps setup and daily commands at the root; implementation details live inside the five folders above. [Code responsibilities and extension points](docs/architecture.md#code-organization).
+
 ## Evidence
 
 ```bash
 make test
 make lint
 make evaluate
-python3 scripts/run.py evaluate --mode ollama --output artifacts/ollama-evaluation.json
+python3 tools/run.py evaluate --mode ollama --output artifacts/ollama-evaluation.json
 ```
 
 Tests exercise all five failures with actual Spark, restart-safe approval, rejected/stale decisions, input tampering, patch scope, idempotency, and unchanged healthy output. Evaluations compare against known causes and record verified recovery, unnecessary changes, latency, tokens, and local inference API cost. The evaluation owner explicitly approves gated test candidates; normal dashboard runs wait for the operator. [Recorded verification](docs/verification.md).

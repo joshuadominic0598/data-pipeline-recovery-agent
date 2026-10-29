@@ -2,11 +2,22 @@
 
 Measured locally on **25 October 2026** with macOS arm64, Python 3.12.14, Java 17.0.21, PySpark 4.0.1, and Qwen3 8B through Ollama. These results cover known synthetic failures, not production generalization.
 
-## Automated checks
+## Structure refactor validation — 29 October 2026
+
+- **20 tests passed**, including the original 18 Spark/API cases and two new checks for isolated app instances and imports without runtime writes.
+- All five deterministic evaluation cases diagnosed correctly and recovered with every quality gate passing; no mismatched-cause deployments occurred.
+- A browser-triggered Qwen schema-drift incident recovered with seven production gates passing. Repair, quality, data, history, guardrails, and queued-notification views were checked after splitting the frontend. A dependency repair also waited across a server restart, then resumed after browser approval and passed all seven gates.
+- TypeScript production build, unused-import/parameter checks, Prettier, and Ruff passed.
+- A built wheel was installed outside the source tree: package import, bundled contract, all five patch recipes, and the writable runtime-home default passed. The editable installation also succeeded.
+- HTTP method/path parity, documentation links, relocated Databricks notebook paths, unchanged transformation AST, and acceptance of a pre-refactor candidate were checked.
+
+The refactor keeps existing local incident state and separates source from runtime artifacts. These checks used an isolated state directory and outbox delivery; no new Gmail messages or cloud jobs were sent. The earlier live-model measurements below remain historical evidence. Databricks deployment remains unverified.
+
+## Automated checks — 25 October 2026
 
 - **18 tests passed** with actual Spark execution.
 - Frontend TypeScript checks and Vite production build passed.
-- Ruff checks passed for backend, tests, scripts, and Databricks reference notebooks.
+- Ruff checks passed for src, tests, tools, and Databricks reference notebooks.
 - Five injected failures exercised diagnosis, isolated testing, release creation, checkpoint reuse, and downstream verification.
 - Additional checks covered healthy runs without edits, exact output equivalence after replay deduplication, rejected/stale approvals, changed inputs after approval, whole-module patch enforcement, trigger/outbox idempotency, and HTTP host/origin/operator boundaries.
 - A successful Spark write containing duplicate rows and corrupt usable inventory failed independent quality validation.
